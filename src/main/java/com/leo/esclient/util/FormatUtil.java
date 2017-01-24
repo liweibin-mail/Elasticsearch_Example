@@ -36,7 +36,7 @@ public class FormatUtil {
                 case '[':
                     sb.append(c);
                     sb.append("\n");
-                    addIndentBlank(sb, indent++);
+                    addIndentBlank(sb, ++indent);
                     break;
                 case ']':
                 case '}':
