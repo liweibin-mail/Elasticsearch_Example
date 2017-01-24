@@ -1,6 +1,7 @@
 package com.leo.esclient;
 
 import com.alibaba.fastjson.JSON;
+import com.leo.esclient.util.FormatUtil;
 import com.sun.org.glassfish.gmbal.Description;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -47,7 +48,7 @@ public class Test_01 {
                     Collections.<String, String>emptyMap(),
                     entity);
             System.out.println("------------out--------------");
-            System.out.println(EntityUtils.toString(indexResponse.getEntity()));
+            FormatUtil.printJson(EntityUtils.toString(indexResponse.getEntity()));
         } finally {
             if (restClient != null)
                 restClient.close();
