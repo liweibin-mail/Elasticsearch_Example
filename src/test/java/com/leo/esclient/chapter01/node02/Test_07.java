@@ -13,19 +13,16 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * Elasticsearch 的集群监控信息中包含了许多的统计数据，其
- * 中最为重要的一项就是 集群健康 ，
- * 它在 status 字段中展示为
- * 1）green 所有的主分片和副本分片都正常运行。
- * 2）yellow 所有的主分片都正常运行，但不是所有的副本分片都正常运行。
- * 3）red 有主分片没能正常运行。
- *
- * 注：
- * unassigned_shards : 在同一个节点上既保存原始数据又保存副本是没有意义的，
- * 因为一旦失去了那个节点，我们也将丢失该节点上的所有副本数据
+ * Created by liweibin on 2017/1/25 0025.
  */
-public class Test_06 {
+public class Test_07 {
 
+    /**
+     * 添加索引，并创建指定的分片和副本数
+     * 当然，如果只是在相同节点数目的集群上增加更多的副本分片并不能提高性能，
+     * 因为每个分片从节点上获得的资源会变少。
+     * 你需要增加更多的硬件资源来提升吞吐量。
+     */
     @Test
     public void test_01() throws IOException {
         RestClient restClient = null;
@@ -34,10 +31,17 @@ public class Test_06 {
                     new HttpHost("localhost", 9200, "http"),
                     new HttpHost("localhost", 9201, "http")).build();
 
-            HttpEntity entity = new NStringEntity("");
+            String query = "{\n" +
+                    "   \"settings\" : {\n" +
+                    "      \"number_of_shards\" : 3,\n" + //3个主分片
+                    "      \"number_of_replicas\" : 1\n" + //每个主分片1个副本
+                    "   }\n" +
+                    "}";
+
+            HttpEntity entity = new NStringEntity(query);
             Response indexResponse = restClient.performRequest(
-                    "GET",
-                    "_cluster/health",
+                    "PUT",
+                    "/blogs",
                     Collections.<String, String>emptyMap(),
                     entity);
             System.out.println("------------out--------------");
