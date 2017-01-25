@@ -1,10 +1,11 @@
-package com.leo.esclient;
+package com.leo.esclient.chapter01.node01;
 
 import com.alibaba.fastjson.JSON;
 import com.leo.esclient.util.FormatUtil;
 import com.sun.org.glassfish.gmbal.Description;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
@@ -19,10 +20,10 @@ import java.util.Map;
 /**
  * Created by liweibin on 2017/1/24 0024.
  */
-public class Test_04 {
+public class Test_01 {
 
     @Test
-    @Description("使用查询表达式搜索")
+    @Description("计算集群中文档的数量")
     public void test_01() throws IOException {
         RestClient restClient = null;
         try {
@@ -30,19 +31,20 @@ public class Test_04 {
                     new HttpHost("localhost", 9200, "http"),
                     new HttpHost("localhost", 9201, "http")).build();
 
-            Map<String, Object> match = new HashMap<>();
-            match.put("last_name", "Smith");
+            Map<String, Object> nested = new HashMap<>();
+            nested.put("match_all", new HashMap());
+            Map<String, Object> map = new HashMap<>();
+            map.put("query", nested);
 
-            Map<String, Object> query = new HashMap<>();
-            query.put("match", match);
+            System.out.println("-----------------------------");
+            System.out.println(JSON.toJSONString(map));
+            System.out.println("-----------------------------");
 
-            Map<String, Object> json = new HashMap<>();
-            json.put("query", query);
-
-            HttpEntity entity = new NStringEntity(JSON.toJSONString(json));
+            HttpEntity entity = new NStringEntity(
+                    JSON.toJSONString(map), ContentType.APPLICATION_JSON);
             Response indexResponse = restClient.performRequest(
                     "GET",
-                    "megacorp/employee/_search",
+                    "_count?pretty",
                     Collections.<String, String>emptyMap(),
                     entity);
             System.out.println("------------out--------------");
@@ -52,11 +54,5 @@ public class Test_04 {
                 restClient.close();
 
         }
-    }
-
-    @Test
-    @Description("")
-    public void test_02() {
-
     }
 }

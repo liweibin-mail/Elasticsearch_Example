@@ -1,4 +1,4 @@
-package com.leo.esclient;
+package com.leo.esclient.chapter01.node01;
 
 import com.leo.esclient.util.FormatUtil;
 import com.sun.org.glassfish.gmbal.Description;

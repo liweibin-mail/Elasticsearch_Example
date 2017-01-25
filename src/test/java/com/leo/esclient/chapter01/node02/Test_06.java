@@ -1,11 +1,8 @@
-package com.leo.esclient;
+package com.leo.esclient.chapter01.node02;
 
-import com.alibaba.fastjson.JSON;
 import com.leo.esclient.util.FormatUtil;
-import com.sun.org.glassfish.gmbal.Description;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
@@ -14,16 +11,18 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by liweibin on 2017/1/24 0024.
+ * Elasticsearch 的集群监控信息中包含了许多的统计数据，其
+ * 中最为重要的一项就是 集群健康 ，
+ * 它在 status 字段中展示为 green 、 yellow 或者 red 。
  */
-public class Test_01 {
+public class Test_06 {
 
+    /**
+     * 挖掘出雇员中最受欢迎的兴趣爱好
+     */
     @Test
-    @Description("计算集群中文档的数量")
     public void test_01() throws IOException {
         RestClient restClient = null;
         try {
@@ -31,20 +30,18 @@ public class Test_01 {
                     new HttpHost("localhost", 9200, "http"),
                     new HttpHost("localhost", 9201, "http")).build();
 
-            Map<String, Object> nested = new HashMap<>();
-            nested.put("match_all", new HashMap());
-            Map<String, Object> map = new HashMap<>();
-            map.put("query", nested);
+            String queryStr = "{\n" +
+                    "  \"aggs\": {\n" +
+                    "    \"all_interests\": {\n" +
+                    "      \"terms\": { \"field\": \"interests\" }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}";
 
-            System.out.println("-----------------------------");
-            System.out.println(JSON.toJSONString(map));
-            System.out.println("-----------------------------");
-
-            HttpEntity entity = new NStringEntity(
-                    JSON.toJSONString(map), ContentType.APPLICATION_JSON);
+            HttpEntity entity = new NStringEntity(queryStr);
             Response indexResponse = restClient.performRequest(
                     "GET",
-                    "_count?pretty",
+                    "megacorp/employee/_search",
                     Collections.<String, String>emptyMap(),
                     entity);
             System.out.println("------------out--------------");
@@ -52,7 +49,6 @@ public class Test_01 {
         } finally {
             if (restClient != null)
                 restClient.close();
-
         }
     }
 }

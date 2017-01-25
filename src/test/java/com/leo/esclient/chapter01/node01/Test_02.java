@@ -1,4 +1,4 @@
-package com.leo.esclient;
+package com.leo.esclient.chapter01.node01;
 
 import com.alibaba.fastjson.JSON;
 import com.leo.esclient.util.FormatUtil;
