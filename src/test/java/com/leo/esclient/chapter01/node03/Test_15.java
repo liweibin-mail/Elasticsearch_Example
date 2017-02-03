@@ -76,7 +76,6 @@ public class Test_15 {
                     new HttpHost("localhost", 9200, "http"),
                     new HttpHost("localhost", 9201, "http")).build();
 
-            //增加字段 tags/views 到博客文章 -- 可重复执行
             String query = "{\n" +
                     "   \"script\" : \"ctx._source.views+=1\"\n" +
                     "}";

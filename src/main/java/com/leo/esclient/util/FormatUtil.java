@@ -22,6 +22,7 @@ public class FormatUtil {
      */
     public static String formatJson(String jsonStr) {
         if (jsonStr == null || jsonStr.length() < 1) return "";
+        jsonStr = jsonStr.replaceAll("\n", "");
         StringBuilder sb = new StringBuilder();
         char pre = '\0';
         int indent = 0;
