@@ -11,9 +11,7 @@ import org.elasticsearch.client.RestClient;
 import java.io.IOException;
 import java.util.Collections;
 
-/**
- * Hello world!
- */
+
 public class App {
     public static void main(String[] args) throws IOException {
         RestClient restClient = null;
